@@ -1,4 +1,4 @@
-void setupLight()
+void setup()
 {
   smooth();
   background(0);
@@ -12,7 +12,7 @@ int distance = 5;
 float stroke_weight = 0.5;
 boolean bstroke = false;
 
-void drawLight()
+void draw()
 {
   background(0);
   noStroke();
