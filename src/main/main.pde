@@ -5,8 +5,7 @@ float d1, E1, E1x, E1y, d2, E2, E2x, E2y;
 float EEx, EEy, EE, deltax, deltay;
 float ll = 0.5;
 ArrayList <Particle> particles = new ArrayList <Particle> ();
-PShape charge; 
- 
+
 void setup() {
   size(1000, 700, P2D);
   smooth(16);
@@ -14,8 +13,6 @@ void setup() {
   strokeWeight(0.75);
   while (particles.size () < 20000) { particles.add(new Particle()); }
   
-  charge = createShape(ELLIPSE, -50, -25, 50, 50);
-  charge.setFill(color(255, 0, 0, 0));
 }
  
 void draw() {
@@ -29,7 +26,21 @@ void draw() {
     p.run();
   }
   
-  translate(500, 350);
-  shape(charge);
+   for (int i = 0; i < 300; i+=5)
+  {
+    fill(#FF0000, i/10);
+    stroke(#000000);
+      noStroke();
+    ellipse(500, 350, 300 - i, 300 - i);
+  }
+  
+  
+   for (int j = 0; j < 300; j+=5)
+  {
+    fill(#0070FF, j/3);
+    stroke(#000000);
+      noStroke();
+    ellipse(0, 0, 300 - j, 300 - j);
+  }
  
 }
