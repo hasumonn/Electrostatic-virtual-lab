@@ -16,6 +16,8 @@ void setup() {
 }
  
 void draw() {
+  
+  //Drawing the fluid dynamics
   if (frameCount % 5 == 0) {
     noStroke();
     fill(255, 15);
@@ -26,6 +28,7 @@ void draw() {
     p.run();
   }
   
+  //Positive charge - red ball
    for (int i = 0; i < 300; i+=5)
   {
     fill(#FF0000, i/10);
@@ -35,6 +38,7 @@ void draw() {
   }
   
   
+  //Negative charge - blue ball
    for (int j = 0; j < 300; j+=5)
   {
     fill(#0070FF, j/3);
