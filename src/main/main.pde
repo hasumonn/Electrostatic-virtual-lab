@@ -1,5 +1,6 @@
-int cpx=500, cpy=350;
-int qp=1000, qn=1000;
+int cpx=800, cpy=350;
+int cnx=100, cny=200;
+int qp=1000, qn=-1000;
 float x, y, dx, dy, dxn, dyn;
 float d1, E1, E1x, E1y, d2, E2, E2x, E2y;
 float EEx, EEy, EE, deltax, deltay;
@@ -29,22 +30,22 @@ void draw() {
   }
   
   //Positive charge - red ball
-   for (int i = 0; i < 300; i+=5)
+   for (int i = 0; i < 100; i+=5)
   {
     fill(#FF0000, i/10);
     stroke(#000000);
       noStroke();
-    ellipse(500, 350, 300 - i, 300 - i);
+    ellipse(cpx, cpy, 100 - i, 100 - i);
   }
   
   
   //Negative charge - blue ball
-   for (int j = 0; j < 300; j+=5)
+   for (int j = 0; j < 100; j+=5)
   {
     fill(#0070FF, j/3);
     stroke(#000000);
       noStroke();
-    ellipse(0, 0, 300 - j, 300 - j);
+    ellipse(cnx, cny, 100 - j, 100 - j);
   }
  
 }

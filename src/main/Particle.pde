@@ -21,9 +21,12 @@ class Particle {
     E1=qp/(d1*d1);
     E1x=dx*E1/d1;
     E1y=dy*E1/d1;
- 
-    E2x=0.016;
-    E2y=0;
+    dxn=p.x-cnx;
+    dyn=p.y-cny;
+    d2=sqrt(dxn*dxn+dyn*dyn);
+    E2=qn/(d2*d2);
+    E2x=dxn*E2/d2;
+    E2y=dyn*E2/d2;
  
     EEx=E1x+E2x;
     EEy=E1y+E2y;
