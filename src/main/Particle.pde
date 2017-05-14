@@ -31,7 +31,10 @@ class Particle {
     EEx=E1x+E2x;
     EEy=E1y+E2y;
     EE=sqrt(EEx*EEx+EEy*EEy);
- 
+    //Dx=abs(cpx-cnx);
+    //Dy=abs(cpy-cny);
+    //F1x=K*qp*qn/(Dx*Dx);
+    //F1y=K*qp*qn/(Dy*Dy);
     deltax=ll*EEx/EE;
     deltay=ll*EEy/EE;
     return new PVector(deltax, deltay);
