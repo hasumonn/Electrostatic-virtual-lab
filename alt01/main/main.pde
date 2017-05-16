@@ -8,25 +8,22 @@ float d1, E1, E1x, E1y, d2, E2, E2x, E2y;
 float EEx, EEy, EE, deltax, deltay;
 float Dx,Dy,DD,F1x,F1y,FT;
 float ll = 0.5;
-float x2,y2;
-
-//set up electric fields
 ArrayList <Particle> particles = new ArrayList <Particle> ();
-
-//set up electric charges
-ArrayList <ElectricCharge> charges = new ArrayList <ElectricCharge> ();
+float x2,y2;
+PImage img;
 
 
 void setup() {
   size(1000, 700, P2D);
   smooth(16);
-  background(#3c4677);
+  background(#1275F7);
   strokeWeight(0.75);
+  img = loadImage("whale.png");
 
   
   while (particles.size () < 20000) { particles.add(new Particle()); }
-}
 
+}
 float[] Force(){
     Dx=(cpx-cnx);
     Dy=(cpy-cny);
@@ -45,16 +42,13 @@ void draw() {
   //Drawing the fluid dynamics
   if (frameCount % 5 == 0) {
     noStroke();
-    fill(#3c4677, 15);
+    fill(#1275F7, 15);
     rect(0, 0, width, height);
   }
-  
-  stroke(#9cadb5);
+  stroke(#1865A8);
   for (Particle p : particles) {
     p.run();
   }
-  
-  
   float[] F=Force();
   x2=(F[0]*200);
   y2=(F[1]*200);
@@ -68,26 +62,30 @@ void draw() {
   line(0, 0, 10, -10);
   popMatrix();
   
-  for( ElectricCharge e : charges) {
-   
-    for (int i = 0; i < 100; i+=5) {
-      fill(#FF0000, i/10); //change to color of its sign
-      stroke(#000000);
+  
+  
+  
+  //Positive charge - red ball
+   for (int i = 0; i < 100; i+=5)
+  {
+    fill(#FF0000, i/10);
+    stroke(#000000);
       noStroke();
-      ellipse(e.x_pos, e.y_pos, e.c_radius - i, e.c_radius - i);
-  }
- 
-  }
-}
-
-Boolean ifSelect(){
-  return false;
-}
-
-void mousePressed() {
-  if (charges.size() < 2 && !ifSelect()) {
-      ElectricCharge c = new ElectricCharge(10, 100, mouseX, mouseY);
-      charges.add(c); 
+    ellipse(cpx, cpy, 100 - i, 100 - i);
   }
   
+  
+  //Negative charge - blue ball
+   for (int j = 0; j < 100; j+=5)
+  {
+    fill(#0070FF, j/3);
+    stroke(#000000);
+      noStroke();
+    ellipse(cnx, cny, 100 - j, 100 - j);
+  }
+  
+  
+  //whale
+  image(img, 500, 300, 150, 120);
+ 
 }

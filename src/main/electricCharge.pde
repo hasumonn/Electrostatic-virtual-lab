@@ -1,36 +1,15 @@
-class electricCharge {
+class ElectricCharge{
 
-PShape charge;  
+  int inner_radius;
+  int c_radius;
+  int x_pos;
+  int y_pos;
   
-int innerRadius;
-int cRadius;
-int dist;
-float strokeWeight;
-boolean bStroke;
- 
-electricCharge(int c_radius, int distance, int inner_radius, float stroke_weight, boolean bstroke){
-
-innerRadius = inner_radius;
-cRadius = c_radius;
-dist = distance;
-strokeWeight =  stroke_weight;
-bStroke = bstroke;
-
-
-}
- 
-//void drawLight()
-//{
+  ElectricCharge(int tmpInnerRadius, int tmpCRadius, int tmpX, int tmpY){
+    inner_radius = tmpInnerRadius;
+    c_radius = tmpCRadius;
+    x_pos = tmpX;
+    y_pos = tmpY;
+  }
   
-//  noStroke();
-//  for (int i = 0; i < cRadius; i+=dist)
-//  {
-//    fill(#FF0000, i/innerRadius);
-//    strokeWeight(strokeWeight);
-//    stroke(#000000);
-//    if (bStroke == false)
-//    {
-//      noStroke
-
-
 }
