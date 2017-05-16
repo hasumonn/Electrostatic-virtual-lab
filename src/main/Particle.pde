@@ -2,7 +2,7 @@ class Particle {
   PVector loc;
  
   Particle() {
-    loc = new PVector(random(width), random(height));
+    loc = new PVector(random(width), random(height)); // creating random vectors on screen
   }
  
   void run() {
@@ -21,13 +21,14 @@ class Particle {
     E1=qp/(d1*d1);
     E1x=dx*E1/d1;
     E1y=dy*E1/d1;
-    dxn=p.x-cnx;
+    //*********** adding second charge ************
+    dxn=p.x-cnx;  //calculating the effect of second charge on electric field on random vector
     dyn=p.y-cny;
     d2=sqrt(dxn*dxn+dyn*dyn);
     E2=qn/(d2*d2);
-    E2x=dxn*E2/d2;
+    E2x=dxn*E2/d2; //effect of electric field caused by second charge
     E2y=dyn*E2/d2;
- 
+   //************* adding the field from first and second charges. *************************
     EEx=E1x+E2x;
     EEy=E1y+E2y;
     EE=sqrt(EEx*EEx+EEy*EEy);
