@@ -1,10 +1,23 @@
 
 float[] F={0,0};
 float K=8.99;
-
 float Dx,Dy,DD,F1x,F1y,FT;
-
 float x2,y2;
+
+int highlight = #6673b2;
+
+PVector pos_btn = new PVector(400, 600);
+PVector neg_btn = new PVector(600, 600);
+float   btn_width = 30;
+int draw_sign = 2;
+
+int     selected_obj;
+//0: nothing selected
+//1: pos_btn selected
+//2: neg_btn selected
+//3: a charge selected
+
+ElectricCharge current_charge;
 
 //set up electric fields
 ArrayList <Particle> particles = new ArrayList <Particle> ();
@@ -18,7 +31,6 @@ void setup() {
   smooth(16);
   background(#3c4677);
   strokeWeight(0.75);
-  
 }
 
 //float[] Force(){
@@ -34,6 +46,8 @@ void setup() {
 //}
 
 void draw() {
+  
+  btnPanel();
   
   //Drawing the fluid dynamics
     
@@ -68,30 +82,110 @@ void draw() {
       stroke(#000000);
       noStroke();
       ellipse(e.x_pos, e.y_pos, e.c_radius - i, e.c_radius - i);
-  }
- 
+    }
   }
 }
 
-Boolean ifSelect(){
+void btnPanel(){
+  //set up control panel
+  fill(#3c4677);
+  stroke(highlight);
+  rect(350, 575, 300, 50, 7);
+  
+  fill(#FF0000);
+  if (selected_obj == 1){ 
+    fill(highlight);
+  }
+  stroke(#FF0000);
+  ellipse(pos_btn.x, pos_btn.y, btn_width, btn_width);
+  
+  textSize(21);
+  fill(#FF0000);
+  text("+", pos_btn.x -7, pos_btn.y +5.5);
+  
+  
+  fill(#0070FF);
+  if (selected_obj == 2){ 
+    fill(highlight);
+  }
+  stroke(#0070FF);
+  ellipse(neg_btn.x, neg_btn.y, btn_width, btn_width);
+  
+  textSize(23);
+  fill(#0070FF);
+  text("-", neg_btn.x -6, neg_btn.y +5.5);
+  
+  onHover();
+}
+
+
+//1) change the current object under control
+//2) highlight the selected object
+void onHover(){
+  selected_obj = 0;
+  
+  if( inCircle(pos_btn.x, pos_btn.y, btn_width) ) {
+     selected_obj = 1; 
+  }
+  
+  if( inCircle(neg_btn.x, neg_btn.y, btn_width) ) {
+     selected_obj = 2; 
+  }
+  
+  for (ElectricCharge c : charges) {
+    if( inCircle(c.x_pos, c.y_pos, c.c_radius) ) {
+      selected_obj = 3;
+      current_charge = c;
+      break;
+    }
+  }
+}
+
+boolean inCircle(float x, float y, float radius) {
+  float dis_x = x - mouseX;
+  float dis_y = y - mouseY;
+  
+  if( sqrt(sq(dis_x) + sq(dis_y)) < radius) {
+  return true;
+  }
+
+  return false;
+}
+
+boolean inRect(float x, float y, float w, float h) {
+  //stub
   return false;
 }
 
 void mousePressed() {
   
-  int sign = 0;//control sign here
-  
-  if (charges.size() < 4 && !ifSelect()) {
-  
-      ElectricCharge c = new ElectricCharge(10, 100, mouseX, mouseY, sign);
-      charges.add(c); 
-      
-      while (particles.size () < 20000) { particles.add(new Particle()); }
-      for (Particle p : particles) {
-        p.addCenter(mouseX, mouseY, sign);
-      }
-      
-      
+  if(selected_obj == 1){
+    draw_sign = 1;
   }
+  else if(selected_obj == 2){
+    draw_sign = 0;
+  }
+  else if (charges.size() < 4) {
+    
+    if (draw_sign == 1 ){
+      addCharge(1);
+    }
+    
+    if (draw_sign == 0){
+      addCharge(0);
+    }
+  } 
   
+  
+}
+
+void addCharge(int sign){
+  ElectricCharge c = new ElectricCharge(10, 100, mouseX, mouseY, sign);
+  charges.add(c); 
+      
+  while (particles.size () < 20000) { particles.add(new Particle()); }
+  
+  for (Particle p : particles) {
+    p.addCenter(mouseX, mouseY, sign);
+  }
 }
