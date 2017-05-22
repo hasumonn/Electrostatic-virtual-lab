@@ -19,8 +19,7 @@ class ElectricCharge{
     //negative:
     colour = #0070FF;
     }
-    
-    
   }
+  
   
 }

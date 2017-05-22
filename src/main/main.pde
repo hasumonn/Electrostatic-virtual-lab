@@ -19,6 +19,8 @@ int     selected_obj;
 
 ElectricCharge current_charge;
 
+PVector force_vector;
+
 //set up electric fields
 ArrayList <Particle> particles = new ArrayList <Particle> ();
 
@@ -32,18 +34,6 @@ void setup() {
   background(#3c4677);
   strokeWeight(0.75);
 }
-
-//float[] Force(){
-//    Dx=(cpx-cnx);
-//    Dy=(cpy-cny);
-//    DD=sqrt(Dy*Dy+Dx*Dx);
-//    FT=K*qp*qn/(DD*DD);
-//    F1x=FT*Dx/DD;
-//    F1y=FT*Dy/DD;
-//    F[0]=F1x;
-//    F[1]=F1y;
-//    return F;
-//}
 
 void draw() {
   
@@ -62,19 +52,6 @@ void draw() {
     p.run();
   }
   
-  //float[] F=Force();
-  //x2=(F[0]*200);
-  //y2=(F[1]*200);
-  //println(x2,y2);
-  //line(cpx, cpy, cpx+x2,cpy+y2);
-  //pushMatrix();
-  //translate(cpx+x2,cpy+y2);
-  //float a = atan2(-x2, y2);
-  //rotate(a);
-  //line(0, 0, -10, -10);
-  //line(0, 0, 10, -10);
-  //popMatrix();
-  
   for( ElectricCharge e : charges) {
    
     for (int i = 0; i < 100; i+=5) {
@@ -84,6 +61,11 @@ void draw() {
       ellipse(e.x_pos, e.y_pos, e.c_radius - i, e.c_radius - i);
     }
   }
+  
+  if (force_vector != null){
+    drawVector();
+  }
+  
 }
 
 void btnPanel(){
@@ -165,7 +147,11 @@ void mousePressed() {
   else if(selected_obj == 2){
     draw_sign = 0;
   }
-  else if (charges.size() < 4) {
+  else if(selected_obj == 3){
+    computeForce();
+    //assign this charge to Haply
+  }
+  else if (charges.size() < 4){
     
     if (draw_sign == 1 ){
       addCharge(1);
@@ -175,8 +161,7 @@ void mousePressed() {
       addCharge(0);
     }
   } 
-  
-  
+
 }
 
 void addCharge(int sign){
@@ -188,4 +173,34 @@ void addCharge(int sign){
   for (Particle p : particles) {
     p.addCenter(mouseX, mouseY, sign);
   }
+}
+
+void computeForce() {
+   for(ElectricCharge c : charges){
+     if (c != current_charge){
+//    Dx=(cpx-cnx);
+//    Dy=(cpy-cny);
+//    DD=sqrt(Dy*Dy+Dx*Dx);
+//    FT=K*qp*qn/(DD*DD);
+//    F1x=FT*Dx/DD;
+//    F1y=FT*Dy/DD;
+
+//    force_vector.x = F1x;
+//    force_vector.y = F1y;
+     }
+   }
+}
+
+void drawVector() {
+  //x2=(force_vector.x*200);
+  //y2=(force_vector.y*200);
+  //println(x2,y2);
+  //line(current_charge.x_pos, current_charge.y_pos, current_charge.x_pos+x2,current_charge.y_pos+y2);
+  //pushMatrix();
+  //translate(current_charge.x_pos+x2,current_charge.y_pos+y2);
+  //float a = atan2(-x2, y2);
+  //rotate(a);
+  //line(0, 0, -10, -10);
+  //line(0, 0, 10, -10);
+  //popMatrix();
 }
