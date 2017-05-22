@@ -1,8 +1,11 @@
+import grafica.*;
+import java.util.Random;
 
 float[] F={0,0};
 float K=8.99;
 float Dx,Dy,DD,F1x,F1y,FT;
 float x2,y2;
+Random r = new Random();
 
 int highlight = #6673b2;
 
@@ -21,6 +24,9 @@ ElectricCharge current_charge;
 
 PVector force_vector;
 
+GPlot graph;
+GPointsArray points = new GPointsArray(1000);
+
 //set up electric fields
 ArrayList <Particle> particles = new ArrayList <Particle> ();
 
@@ -33,6 +39,7 @@ void setup() {
   smooth(16);
   background(#3c4677);
   strokeWeight(0.75);
+  createGraph();
 }
 
 void draw() {
@@ -65,6 +72,12 @@ void draw() {
   if (force_vector != null){
     drawVector();
   }
+  
+  graph.beginDraw();
+  graph.drawBox();
+
+  graph.drawPoints();
+  graph.endDraw();
   
 }
 
@@ -203,4 +216,26 @@ void drawVector() {
   //line(0, 0, -10, -10);
   //line(0, 0, 10, -10);
   //popMatrix();
+}
+
+void createGraph(){
+  for (int i = 0; i < 1000; i++) {
+    float x = 10 + random(200);
+    float y = 10 * exp(0.015 * x);
+    float xErr = 2*((float) r.nextGaussian());
+    float yErr = 2*((float) r.nextGaussian());
+    points.add(x + xErr, y + yErr);
+  }
+  
+  graph = new GPlot(this);
+  graph.setPos(750, 450);
+  graph.setDim(150, 150);
+  graph.setBoxBgColor(#3c4677);
+  graph.setBoxLineColor(highlight);
+  
+  graph.setLogScale("x");
+  graph.setInvertedXScale(true);
+  
+  graph.setPoints(points);
+  graph.setPointColor(color(100, 100, 255, 50));
 }
