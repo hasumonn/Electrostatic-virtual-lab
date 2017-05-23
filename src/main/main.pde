@@ -189,11 +189,12 @@ void addCharge(int sign){
     p.addCenter(mouseX, mouseY, sign);
   }
   
+  
   current_charge = c;
-  if (charges.size() > 1){
-  ArrayList<PVector> v_list = computeEachForce();
-  computeTotalForce(v_list);
-  }
+  //if (charges.size() > 1){
+  //ArrayList<PVector> v_list = computeEachForce();
+  //computeTotalForce(v_list);
+  //}
 }
 
 ArrayList<PVector> computeEachForce() {
@@ -217,19 +218,20 @@ ArrayList<PVector> computeEachForce() {
 void computeTotalForce(ArrayList<PVector> vectors){
   float fx_total = 10;
   float fy_total = 10;
+  
   for(PVector v : vectors) {
        fx_total += v.x;
        fy_total += v.y;
   }
   
-  force_vector.x = fx_total;
-  force_vector.y = fy_total;
+  force_vector = new PVector(fx_total, fy_total);
 }
 
 void drawVector() {
-  x2=(force_vector.x*200);
-  y2=(force_vector.y*200);
+  x2=(force_vector.x*10);
+  y2=(force_vector.y*10);
   println(x2,y2);
+  stroke(#000000);
   line(current_charge.x_pos, current_charge.y_pos, current_charge.x_pos+x2,current_charge.y_pos+y2);
   pushMatrix();
   translate(current_charge.x_pos+x2,current_charge.y_pos+y2);
