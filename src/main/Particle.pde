@@ -1,5 +1,5 @@
 class Particle {
-  int qp=120, qn=-120;
+
   float ll = 0.5;
   float deltax, deltay;
   

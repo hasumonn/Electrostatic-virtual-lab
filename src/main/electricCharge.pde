@@ -4,6 +4,7 @@ class ElectricCharge{
   int c_radius;
   int x_pos;
   int y_pos;
+  int q;
   int colour;
   
   ElectricCharge(int tmpInnerRadius, int tmpCRadius, int tmpX, int tmpY, int tmpSign){

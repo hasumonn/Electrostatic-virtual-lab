@@ -1,6 +1,7 @@
 import grafica.*;
 import java.util.Random;
 
+int qp=120, qn=-120;
 float[] F={0,0};
 float K=8.99;
 float Dx,Dy,DD,F1x,F1y,FT;
@@ -161,10 +162,11 @@ void mousePressed() {
     draw_sign = 0;
   }
   else if(selected_obj == 3){
-    computeForce();
+    ArrayList<PVector> v_list = computeEachForce();
+    computeTotalForce(v_list);
     //assign this charge to Haply
   }
-  else if (charges.size() < 4){
+  else if (charges.size() < 5){
     
     if (draw_sign == 1 ){
       addCharge(1);
@@ -181,41 +183,61 @@ void addCharge(int sign){
   ElectricCharge c = new ElectricCharge(10, 100, mouseX, mouseY, sign);
   charges.add(c); 
       
-  while (particles.size () < 20000) { particles.add(new Particle()); }
+  while (particles.size () < 2000) { particles.add(new Particle()); }
   
   for (Particle p : particles) {
     p.addCenter(mouseX, mouseY, sign);
   }
+  
+  current_charge = c;
+  if (charges.size() > 1){
+  ArrayList<PVector> v_list = computeEachForce();
+  computeTotalForce(v_list);
+  }
 }
 
-void computeForce() {
+ArrayList<PVector> computeEachForce() {
+    ArrayList<PVector> vectors = new ArrayList<PVector>();   
+  
    for(ElectricCharge c : charges){
      if (c != current_charge){
-//    Dx=(cpx-cnx);
-//    Dy=(cpy-cny);
-//    DD=sqrt(Dy*Dy+Dx*Dx);
-//    FT=K*qp*qn/(DD*DD);
-//    F1x=FT*Dx/DD;
-//    F1y=FT*Dy/DD;
-
-//    force_vector.x = F1x;
-//    force_vector.y = F1y;
+       float dx = c.x_pos - current_charge.x_pos;
+       float dy = c.y_pos - current_charge.y_pos;
+       float dd = sqrt( dx*dx + dy*dy);
+       
+       float ft = K*qp*qn/(dd*dd); // current_charge.q * c.q = qp*qn    
+       PVector vector = new PVector(ft*dx/dd, ft*dy/dd);
+       vectors.add(vector);
      }
    }
+   
+  return vectors;
+}
+
+void computeTotalForce(ArrayList<PVector> vectors){
+  float fx_total = 10;
+  float fy_total = 10;
+  for(PVector v : vectors) {
+       fx_total += v.x;
+       fy_total += v.y;
+  }
+  
+  force_vector.x = fx_total;
+  force_vector.y = fy_total;
 }
 
 void drawVector() {
-  //x2=(force_vector.x*200);
-  //y2=(force_vector.y*200);
-  //println(x2,y2);
-  //line(current_charge.x_pos, current_charge.y_pos, current_charge.x_pos+x2,current_charge.y_pos+y2);
-  //pushMatrix();
-  //translate(current_charge.x_pos+x2,current_charge.y_pos+y2);
-  //float a = atan2(-x2, y2);
-  //rotate(a);
-  //line(0, 0, -10, -10);
-  //line(0, 0, 10, -10);
-  //popMatrix();
+  x2=(force_vector.x*200);
+  y2=(force_vector.y*200);
+  println(x2,y2);
+  line(current_charge.x_pos, current_charge.y_pos, current_charge.x_pos+x2,current_charge.y_pos+y2);
+  pushMatrix();
+  translate(current_charge.x_pos+x2,current_charge.y_pos+y2);
+  float a = atan2(-x2, y2);
+  rotate(a);
+  line(0, 0, -10, -10);
+  line(0, 0, 10, -10);
+  popMatrix();
 }
 
 void createGraph(){
