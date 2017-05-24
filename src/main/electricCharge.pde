@@ -16,9 +16,11 @@ class ElectricCharge{
     if(tmpSign == 1) {
     //positive:
     colour = #FF0000;
+    q = 120;
     } else {
     //negative:
     colour = #0070FF;
+    q = -120;
     }
   }
   

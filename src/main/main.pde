@@ -206,7 +206,7 @@ ArrayList<PVector> computeEachForce() {
        float dy = c.y_pos - current_charge.y_pos;
        float dd = sqrt( dx*dx + dy*dy);
        
-       float ft = K*qp*qn/(dd*dd); // current_charge.q * c.q = qp*qn    
+       float ft = K* current_charge.q * c.q/(dd*dd); // current_charge.q * c.q = qp*qn    
        PVector vector = new PVector(ft*dx/dd, ft*dy/dd);
        vectors.add(vector);
      }
@@ -216,8 +216,8 @@ ArrayList<PVector> computeEachForce() {
 }
 
 void computeTotalForce(ArrayList<PVector> vectors){
-  float fx_total = 10;
-  float fy_total = 10;
+  float fx_total = 0;
+  float fy_total = 0;
   
   for(PVector v : vectors) {
        fx_total += v.x;
