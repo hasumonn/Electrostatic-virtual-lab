@@ -7,8 +7,7 @@ class Particle {
   ArrayList <PVector> centers = new ArrayList <PVector> ();
  
   Particle() {
-    loc = new PVector(random(width), random(height));
-    
+    loc = new PVector(random(width), random(height)); // creating random vectors on screen
   }
  
   void run() {
@@ -39,7 +38,7 @@ class Particle {
     
     for (PVector c : centers) {
     
-    float dx = p.x - c.x;
+    float dx = p.x - c.x;  //calculating the effect of second charge on electric field on random vector
     float dy = p.y - c.y;
     float d  = sqrt(dx*dx + dy*dy);
     
@@ -51,7 +50,7 @@ class Particle {
     E = qn/(d*d);
     }
     
-    float Ex = dx*E/d;
+    float Ex = dx*E/d;  //effect of electric field caused by second charge
     float Ey = dy*E/d;
     
     PVector effect = new PVector(Ex, Ey);

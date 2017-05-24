@@ -5,6 +5,7 @@ int qp=120, qn=-120;
 float[] F={0,0};
 float K=8.99;
 float Dx,Dy,DD,F1x,F1y,FT;
+
 float x2,y2;
 Random r = new Random();
 
@@ -37,11 +38,12 @@ int particle_size = 0;
 ArrayList <ElectricCharge> charges = new ArrayList <ElectricCharge> ();
 
 
-void setup() {
+void setup() { 
   size(1000, 700, P2D);
   smooth(16);
   background(#3c4677);
   strokeWeight(0.75);
+
   createGraph();
 }
 
@@ -211,12 +213,16 @@ void mousePressed() {
 }
 
 void addCharge(int sign){
-  ElectricCharge c = new ElectricCharge(10, 100, mouseX, mouseY, sign);
-  charges.add(c); 
+  if(!inCircle(pos_btn.x, pos_btn.y, mouseX, mouseY, 100) &&
+     !inCircle(neg_btn.x, neg_btn.y, mouseX, mouseY, 100)){
+    ElectricCharge c = new ElectricCharge(10, 100, mouseX, mouseY, sign);
+    charges.add(c); 
 
-  current_charge = c;
-  ArrayList<PVector> v_list = computeEachForce();
-  computeTotalForce(v_list);
+    current_charge = c;
+    ArrayList<PVector> v_list = computeEachForce();
+    computeTotalForce(v_list); 
+     
+   }
 
 }
 
@@ -229,6 +235,7 @@ void flow(){
   }
 }
 
+ //******************* Calculating Force between two charges **********
 ArrayList<PVector> computeEachForce() {
     ArrayList<PVector> vectors = new ArrayList<PVector>();   
   
@@ -259,12 +266,14 @@ void computeTotalForce(ArrayList<PVector> vectors){
   force_vector = new PVector(fx_total, fy_total);
 }
 
+  //******************* drawing force vector ************************
 void drawVector() {
-  x2=(force_vector.x*10);
-  y2=(force_vector.y*10);
+  x2=(force_vector.x*10);  // Fx
+  y2=(force_vector.y*10);  // Fy
 
   stroke(#000000);
-  line(current_charge.x_pos, current_charge.y_pos, current_charge.x_pos+x2,current_charge.y_pos+y2);
+  line(current_charge.x_pos, current_charge.y_pos, current_charge.x_pos+x2,current_charge.y_pos+y2);  //field magnitude
+
   pushMatrix();
   translate(current_charge.x_pos+x2,current_charge.y_pos+y2);
   float a = atan2(-x2, y2);
