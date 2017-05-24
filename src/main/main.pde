@@ -22,6 +22,7 @@ int     selected_obj;
 //3: a charge selected
 
 ElectricCharge current_charge;
+ElectricCharge hovered_charge;
 
 PVector force_vector;
 
@@ -30,6 +31,7 @@ GPointsArray points = new GPointsArray(1000);
 
 //set up electric fields
 ArrayList <Particle> particles = new ArrayList <Particle> ();
+int particle_size = 0;
 
 //set up electric charges
 ArrayList <ElectricCharge> charges = new ArrayList <ElectricCharge> ();
@@ -48,21 +50,48 @@ void draw() {
   btnPanel();
   
   //Drawing the fluid dynamics
-    
+  flow();
+  
+  if (charges.size() == 0) {
+    particle_size = 150;
+  } else if (charges.size() == 1){
+    particle_size = 200;
+  } else if (charges.size() == 2){
+    particle_size = 250;
+  } else if (charges.size() == 3){
+    particle_size = 300;
+  } else if (charges.size() == 4){
+    particle_size = 350;
+  } else if (charges.size() == 5){
+    particle_size = 400;
+  }
+  
+  while (particles.size () < particle_size) { 
+    Particle p = new Particle();
+    particles.add(p); 
+  }
+
   if (frameCount % 5 == 0) {
     noStroke();
     fill(#3c4677, 15);
     rect(0, 0, width, height);
   }
   
+  ArrayList<Particle> temp = new ArrayList<Particle>(); 
+  
   stroke(#9cadb5);
   for (Particle p : particles) {
-    p.run();
+     if(!stuck(p.loc)){
+       p.run();
+       temp.add(p);
+     }
   }
+  
+  particles = temp;
   
   for( ElectricCharge e : charges) {
    
-    for (int i = 0; i < 100; i+=5) {
+    for (int i = 0; i < e.c_radius; i+=5) {
       fill(e.colour, i/10); //change to color of its sign
       stroke(#000000);
       noStroke();
@@ -120,28 +149,28 @@ void btnPanel(){
 void onHover(){
   selected_obj = 0;
   
-  if( inCircle(pos_btn.x, pos_btn.y, btn_width) ) {
+  if( inCircle(pos_btn.x, pos_btn.y, mouseX, mouseY, btn_width) ) {
      selected_obj = 1; 
   }
   
-  if( inCircle(neg_btn.x, neg_btn.y, btn_width) ) {
+  if( inCircle(neg_btn.x, neg_btn.y, mouseX, mouseY, btn_width) ) {
      selected_obj = 2; 
   }
   
   for (ElectricCharge c : charges) {
-    if( inCircle(c.x_pos, c.y_pos, c.c_radius) ) {
+    if( inCircle(c.x_pos, c.y_pos, mouseX, mouseY, c.c_radius) ) {
       selected_obj = 3;
-      current_charge = c;
+      hovered_charge = c;
       break;
     }
   }
 }
 
-boolean inCircle(float x, float y, float radius) {
-  float dis_x = x - mouseX;
-  float dis_y = y - mouseY;
+boolean inCircle(float x1, float y1, float x2, float y2, float diameter) {
+  float dis_x = x1 - x2;
+  float dis_y = y1 - y2;
   
-  if( sqrt(sq(dis_x) + sq(dis_y)) < radius) {
+  if( sqrt(sq(dis_x) + sq(dis_y)) < diameter/2) {
   return true;
   }
 
@@ -155,6 +184,7 @@ boolean inRect(float x, float y, float w, float h) {
 
 void mousePressed() {
   
+  force_vector = null;
   if(selected_obj == 1){
     draw_sign = 1;
   }
@@ -162,6 +192,7 @@ void mousePressed() {
     draw_sign = 0;
   }
   else if(selected_obj == 3){
+    current_charge = hovered_charge;
     ArrayList<PVector> v_list = computeEachForce();
     computeTotalForce(v_list);
     //assign this charge to Haply
@@ -182,19 +213,20 @@ void mousePressed() {
 void addCharge(int sign){
   ElectricCharge c = new ElectricCharge(10, 100, mouseX, mouseY, sign);
   charges.add(c); 
-      
-  while (particles.size () < 2000) { particles.add(new Particle()); }
-  
-  for (Particle p : particles) {
-    p.addCenter(mouseX, mouseY, sign);
-  }
-  
-  
+
   current_charge = c;
-  //if (charges.size() > 1){
-  //ArrayList<PVector> v_list = computeEachForce();
-  //computeTotalForce(v_list);
-  //}
+  ArrayList<PVector> v_list = computeEachForce();
+  computeTotalForce(v_list);
+
+}
+
+void flow(){
+  for (ElectricCharge e : charges) {
+      for (Particle p : particles) {
+         p.addCenter(e.x_pos, e.y_pos, e.sign);
+      }
+     
+  }
 }
 
 ArrayList<PVector> computeEachForce() {
@@ -230,7 +262,7 @@ void computeTotalForce(ArrayList<PVector> vectors){
 void drawVector() {
   x2=(force_vector.x*10);
   y2=(force_vector.y*10);
-  println(x2,y2);
+
   stroke(#000000);
   line(current_charge.x_pos, current_charge.y_pos, current_charge.x_pos+x2,current_charge.y_pos+y2);
   pushMatrix();
@@ -263,3 +295,14 @@ void createGraph(){
   graph.setPoints(points);
   graph.setPointColor(color(100, 100, 255, 50));
 }
+
+boolean stuck(PVector position) {
+   
+    for (ElectricCharge e : charges){
+     if (inCircle(position.x, position.y, e.x_pos, e.y_pos, e.c_radius)){
+      return true;
+      }
+    }
+    return false;
+}
+  

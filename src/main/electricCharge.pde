@@ -4,6 +4,7 @@ class ElectricCharge{
   int c_radius;
   int x_pos;
   int y_pos;
+  int sign;
   int q;
   int colour;
   
@@ -12,6 +13,7 @@ class ElectricCharge{
     c_radius = tmpCRadius;
     x_pos = tmpX;
     y_pos = tmpY;
+    sign = tmpSign;
     
     if(tmpSign == 1) {
     //positive:

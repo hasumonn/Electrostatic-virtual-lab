@@ -16,7 +16,9 @@ class Particle {
     if (loc.x > width || loc.x < 0 || loc.y > height || loc.y < 0) {
       loc = new PVector(random(width), random(height));
     } else {
+      if (centers.size() != 0){
       loc.add(getDirection(loc));
+      }
       point(loc.x, loc.y);
     }
   }
@@ -68,32 +70,7 @@ class Particle {
     
     deltax=ll * total_ex/total_e;
     deltay=ll * total_ey/total_e;
-    
-    //dx=p.x-x_center; 
-    //dy=p.y-y_center;
-    //d1=sqrt(dx*dx+dy*dy);
-    //E1=qp/(d1*d1);
-    //E1x=dx*E1/d1;
-    //E1y=dy*E1/d1;
-    
-    //dxn=p.x-300;
-    //dyn=p.y-300;
-    //d2=sqrt(dxn*dxn+dyn*dyn);
-    //E2=qn/(d2*d2);
-    //E2x=dxn*E2/d2;
-    //E2y=dyn*E2/d2;
- 
-    //EEx=E1x+E2x;
-    //EEy=E1y+E2y;
-    //EE=sqrt(EEx*EEx+EEy*EEy);
-    
-    //Dx=abs(cpx-cnx);
-    //Dy=abs(cpy-cny);
-    //F1x=K*qp*qn/(Dx*Dx);
-    //F1y=K*qp*qn/(Dy*Dy);
-    //deltax=ll*EEx/EE;
-    //deltay=ll*EEy/EE;
-    
+   
     return new PVector(deltax, deltay);
   }
 }
