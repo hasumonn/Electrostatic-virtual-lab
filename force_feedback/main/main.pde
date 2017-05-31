@@ -130,11 +130,11 @@ void draw() {
   if (frameCount % 0.5 == 0) {
     noStroke();
     //fill(#3c4677, 10);
-    fill(255, 15);
+    fill(255,8);
     rect(0, 0, width, height);
    }
    
-     if (frameCount % 40 == 0) {
+     if (frameCount % 50 == 0) {
 
     ArrayList<Particle> temp = new ArrayList<Particle>();
    for (int i = particles.size()/2; i < particles.size(); i++){
@@ -328,6 +328,27 @@ void computeTotalForce(ArrayList<PVector> vectors){
   for(PVector v : vectors) {
        fx_total += v.x;
        fy_total += v.y;
+       //println(fx_total,fy_total);
+       
+       //if((abs(f_ee.x))>5){
+       //      f_ee.x=0;
+       //      f_ee.y=0;
+       //      println("too close");
+       //      //|abs(f_ee.y)>5
+       //}
+       //else{
+           f_ee.x=-fx_total/25;
+           f_ee.y=fy_total/25;
+           println(abs(-fx_total),abs(fy_total));
+           if((20<=abs(fx_total))|20<=abs(fy_total)) {
+             f_ee.x=-15/fx_total;
+             f_ee.y=15/fy_total;
+           }else{
+             f_ee.x=-fx_total/30;
+             f_ee.y=fy_total/30;
+         }
+     //}
+       
   }
   
   force_vector = new PVector(5*fx_total, 5*fy_total);
@@ -419,6 +440,8 @@ void onTickEvent(CountdownTimer t, long timeLeftUntilFinish){
     
 
   }
+  
+//f_ee.set(-10,-10);
       haply_2DoF.set_device_torques(f_ee.array());
     torques.set(haply_2DoF.mechanisms.get_torque());
     haply_2DoF.device_write_torques();
