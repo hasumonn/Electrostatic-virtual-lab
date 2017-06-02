@@ -6,6 +6,10 @@ import com.dhchoi.CountdownTimer;
 import com.dhchoi.CountdownTimerService;
 import grafica.*;
 import java.util.Random;
+import ddf.minim.*;
+import ddf.minim.ugens.*;
+AudioPlayer player;
+Minim minim;//audio context
 
 
 /* Device block definitions ********************************************************************************************/
@@ -77,6 +81,11 @@ ArrayList <ElectricCharge> charges = new ArrayList <ElectricCharge> ();
 
 
 void setup() {
+  minim = new Minim(this);
+  player = minim.loadFile("fl1.mp3", 2048);
+  player.loop();
+  player.setGain(-60);
+  //player.play();
   size(1000, 700, P2D);
   smooth(16);
   background(255);
@@ -329,25 +338,35 @@ void computeTotalForce(ArrayList<PVector> vectors){
        fx_total += v.x;
        fy_total += v.y;
        //println(fx_total,fy_total);
-       
+      
        //if((abs(f_ee.x))>5){
        //      f_ee.x=0;
        //      f_ee.y=0;
        //      println("too close");
        //      //|abs(f_ee.y)>5
        //}
+       //if (fx_total==0&fy_total==0){
+       // player.setGain(-60);
+       //}
        //else{
            f_ee.x=-fx_total/25;
            f_ee.y=fy_total/25;
            println(abs(-fx_total),abs(fy_total));
-           if((20<=abs(fx_total))|20<=abs(fy_total)) {
-             f_ee.x=-15/fx_total;
-             f_ee.y=15/fy_total;
+           if((30<=abs(fx_total)&abs(fx_total)<50)|30<=abs(fy_total)&abs(fy_total)<50) {
+             f_ee.x=0;
+             f_ee.y=0;
+              player.setGain(1);
+           }
+           else if((50<=abs(fx_total))|50<=abs(fy_total)) {
+             f_ee.x=fx_total;
+             f_ee.y=-fy_total;
+              player.setGain(1);
            }else{
              f_ee.x=-fx_total/30;
              f_ee.y=fy_total/30;
+             player.setGain(-10/(fy_total*fy_total+fx_total*fx_total));
          }
-     //}
+     
        
   }
   
